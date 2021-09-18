@@ -1,23 +1,56 @@
 import logo from './logo.svg';
 import './App.css';
+import { useEffect, useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Spinner } from 'react-bootstrap';
+import axios from 'axios';
 
 function App() {
+const [users, setUsers] = useState([])
+const [loading, setLoading] = useState(true)
+// useEffect(() => {
+//   const getUsers = () => {
+//   fetch('https://jsonplaceholder.typicode.com/users')
+//   .then(response => response.json())
+//   // .then(response=>console.log("the response is",response))
+//   .then(data => setUsers(data))
+//   .catch(error=>console.log(error))
+//   }
+// getUsers()
+// setLoading(false)
+// console.log(users)
+// }, [])
+
+useEffect(() => {
+ const fetchVideos = async() => {
+   try {
+      const people = await axios.get('https://jsonplaceholder.typicode.com/photos')
+      setUsers(people.data)
+      setLoading(false)
+      console.log(people)
+   } catch (error) {
+     console.log(error)
+   }
+ }
+ fetchVideos()
+ console.log(users)
+}, [])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {
+        loading ? <Spinner animation="border" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </Spinner>
+     : <div>
+
+   {users.map(el=>
+    <div>
+      <h1> {el.title} </h1>
+    </div>
+    )}
+    </div> }
+    
     </div>
   );
 }
